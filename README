@@ -1,0 +1,66 @@
+Musat Mihai-Robert
+Grupa 323CB
+
+=======================Tema 1 PP - Interpretor in Haskell=======================
+
+Subpunctul a)
+-------------
+
+	Am implementat acest task separat de celelalte doua, astfel ca am scris
+doar in fisierul ClassState.hs.Pentru definirea tipului ClassState, am ales sa
+folosesc o abordare asemanatoare cu cea a definirii unei liste, containerul 
+de clasa retinand implicit o lista cu elemente fie variabile, fie functii.
+Dupa aceea, implementarea functiilor care opereaza cu ClassState a fost relativ
+usoara deoarece: operatia initEmptyClass inseamna de fapt intoarcerea listei
+vide, insertIntoClass seamana cu inserarea intr-o lista, dar cu constrangerile
+impuse de enunt, iar getValues e un fel de transpunere a elementelor listei
+(fie ele variabile sau functii) intr-o lista de liste, doar ca sub o anumita 
+forma data.
+  
+Subpunctul b)
+-------------
+
+	Pentru implementarea acestui task, primul pas pe care l-am facut a fost 
+sa imi definesc ce inseamna un program, si am ales o abordare asemanatoare 
+subpunctului a), unde mi-am definit ce inseamna containerul de clasa.Apoi, 
+functiile precizate in enunt: initEmptyProgram, getClasses​, getVars​, getParentClass,
+getFuncsForClass au fost relativ usor de implementat prin pattern matching, pornind
+de la cel mai particular element dintr-un program care nu este gol, si anume 
+variabilele, pana la cel mai general element, clasele.In cazul functiei 
+getFuncsForClass am ales sa fac si o functie auxiliara getFuncs pentru a retine
+toate functiile dintr-o clasa intr-un acumulator, iar functia ceruta va apela aceasta
+functie auxiliara cu acumulatorul reprezentand lista vida.Dupa aceea, m-am gandit
+cum as vrea arate o instructiune si am ales sa o codific ca o declaratie de variabila,
+de functie sau de clasa.Inainte de implementarea parsarii propriu-zise, am mai facut
+cateva functii auxiliare: ignoreToLetter, care ignora toate caracterele care nu sunt 
+litere de la inceputul unui string, extractWord, care extrage primul cuvant dintr-un 
+sir de caractere facand split in perechi de forma (token, remainingString), getToken,
+care se foloseste de functiile anterioare extragand toate cuvintele si ignorand toate
+caracterele care nu sunt litere de dinaintea oricarui cuvant.Avand aceste functii 
+construite, primul pas in parsarea string-ului este impartirea acestuia in linii, 
+urmata de tokenizare (fiecare token este format din caractere alfa-numerice si incepe
+cu o litera).Pentru a realiza acest lucru, am construit si alte functii auxiliare
+precum parseClass, parseVariable, parseFunction ale caror rezultate vor putea fi 
+folosite de catre parseLine, prin care tokenii de pe aceeasi linie sunt folositi in
+construirea diverselor declaratii (de clase, functii sau variabile).Astfel, la 
+sfarsitul pasului de parsare, se creeaza o lista de instructiuni, unde fiecare 
+instructiune poate fi una din declaratiile mentionate anterior.In ceea ce priveste
+interpretarea listei de instructiuni pentru a actualiza programul, faptul ca am stocat
+programul ca o lista de declaratii mi-a permis ca adaugarea unei noi instructiuni
+sa fie relativ usoara, singurul lucru care trebuie facut inainte de adaugarea propriu-zisa
+fiind verificarea validitatii instructiunii.
+
+Subpunctul c)
+-------------
+	
+	Acest task mi s-a parut mult mai usor in comparatie cu subpunctul b), ideea de 
+rezolvare a acestuia avand la baza implementarea recursiva a functiei infer, care face 
+inferenta de tip.Asa cum se precizeaza si in enunt sunt 2 cazuri posibile: fie se doreste
+inferenta tipului unei variabile, fie se doreste inferenta de tip pentru o functie.
+In primul caz, acest lucru poate fi facut doar cautand variabila in program si returnand
+tipul acesteia, daca variabila exista.In celalalt caz, se face inferenta de tip pentru toti
+parametrii functiei, si in cazul in care procesul se termina cu succes, se incearca 
+identificarea functiei.Daca functia nu este atasata clasei curente, se realizeaza o cautare
+recursiva in parintii tuturor claselor din program pana cand se gaseste functia in cauza
+(in cazul in care a fost explorata intreaga ierarhie a claselor si nu s-a gasit functia, se
+returneaza Nothing).
